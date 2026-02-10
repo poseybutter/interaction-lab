@@ -1,4 +1,4 @@
-# KRDS Interaction Lab Platform
+# Interaction Lab Platform
 
 퍼블리셔가 **복사해서 바로 쓸 수 있는 인터랙션 프리셋**(순수 HTML/CSS/JS)과, 이를 **React Viewer**에서 문서/프리뷰(iframe)로 확인하는 실험용 프로젝트입니다.
 
