@@ -1,0 +1,309 @@
+/* ==========================================================================
+  components/_switch.scss
+  - KRDS 토글 스위치 (프로젝트 토큰 버전)
+  - 구조: KRDS 공식 패턴
+  - 토큰: 프로젝트 variables.scss
+========================================================================== */
+
+/* ==========================================================================
+   Mixins
+========================================================================== */
+
+// 사이즈 정의
+@mixin form-toggle-switch-size-variable() {
+  // 사이즈 맵
+  $form-toggle-switch-size: (
+    medium: (
+      button-width: 3.2rem,
+      button-height: 2rem,
+      check-size: 1.6rem,
+      gap: 0.8rem,
+      font-size: 1.4rem,
+      line-height: 2rem,
+    ),
+    large: (
+      button-width: 4rem,
+      button-height: 2.4rem,
+      check-size: 2rem,
+      gap: 1rem,
+      font-size: 1.6rem,
+      line-height: 2.4rem,
+    ),
+  );
+
+  // CSS 변수 생성
+  @each $size, $props in $form-toggle-switch-size {
+    @each $prop, $value in $props {
+      --form-toggle-switch-#{$prop}-#{$size}: #{$value};
+    }
+  }
+
+  // 사이즈별 클래스
+  @each $size, $props in $form-toggle-switch-size {
+    &.#{$size} {
+      [type="checkbox"] {
+        ~ label {
+          @include form-toggle-switch-label(#{$size});
+          .switch-toggle {
+            @include form-toggle-switch-button(#{$size});
+            
+            // KRDS 체크 스타일 (Remix Icon 제외)
+            & > i:not([class*="ri-"]) {
+              @include form-toggle-switch-check(#{$size});
+            }
+            
+            // Remix Icon 전용 스타일
+            & > i[class*="ri-"] {
+              position: absolute;
+              top: 50%;
+              left: 0.4rem;
+              transform: translateY(-50%);
+              font-size: 1.4rem;
+              color: var(--color-text);
+              transition: left 0.3s cubic-bezier(0.4, 0, 0.23, 1);
+            }
+          }
+        }
+        &:checked {
+          ~ label {
+            .switch-toggle {
+              // KRDS 체크 이동
+              & > i:not([class*="ri-"]) {
+                @include form-toggle-switch-check-checked(#{$size});
+              }
+              
+              // Remix Icon 이동
+              & > i[class*="ri-"] {
+                left: calc(
+                  var(--form-toggle-switch-button-width-#{$size}) - 
+                  1.4rem - 
+                  0.4rem
+                );
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// 컬러 정의
+@mixin form-toggle-switch-color-variable() {
+  --form-toggle-switch-color-text: var(--color-text);
+  --form-toggle-switch-color-text-disabled: var(--color-muted);
+  --form-toggle-switch-button-bg: var(--color-border);
+  --form-toggle-switch-button-bg-checked: var(--color-primary);
+  --form-toggle-switch-check-bg: var(--color-surface);
+  --form-toggle-switch-check-border: var(--color-border);
+  --form-toggle-switch-check-border-checked: var(--color-primary);
+  --form-toggle-switch-button-bg-disabled: var(--color-surface-2);
+  --form-toggle-switch-check-bg-disabled: var(--color-muted);
+}
+
+// Dark 모드 컬러
+@mixin form-toggle-switch-color-dark() {
+  --form-toggle-switch-color-text: var(--color-text);
+  --form-toggle-switch-color-text-disabled: var(--color-muted);
+  --form-toggle-switch-button-bg: rgba(255, 255, 255, 0.2);
+  --form-toggle-switch-button-bg-checked: var(--color-primary);
+  --form-toggle-switch-check-bg: var(--color-surface);
+  --form-toggle-switch-check-border: rgba(255, 255, 255, 0.2);
+  --form-toggle-switch-check-border-checked: var(--color-primary);
+  --form-toggle-switch-button-bg-disabled: rgba(255, 255, 255, 0.1);
+  --form-toggle-switch-check-bg-disabled: rgba(255, 255, 255, 0.3);
+}
+
+// Label 사이즈
+@mixin form-toggle-switch-label($size) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--form-toggle-switch-gap-#{$size});
+  font-size: var(--form-toggle-switch-font-size-#{$size});
+  line-height: var(--form-toggle-switch-line-height-#{$size});
+  color: var(--form-toggle-switch-color-text);
+  cursor: pointer;
+}
+
+// Button 사이즈
+@mixin form-toggle-switch-button($size) {
+  position: relative;
+  display: inline-block;
+  width: var(--form-toggle-switch-button-width-#{$size});
+  height: var(--form-toggle-switch-button-height-#{$size});
+  border-radius: calc(var(--form-toggle-switch-button-height-#{$size}) / 2);
+  background-color: var(--form-toggle-switch-button-bg);
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.23, 1);
+}
+
+// Check (토글 핸들) 사이즈
+@mixin form-toggle-switch-check($size) {
+  position: absolute;
+  top: 50%;
+  left: 0.2rem;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--form-toggle-switch-check-size-#{$size});
+  height: var(--form-toggle-switch-check-size-#{$size});
+  border-radius: 50%;
+  background-color: var(--form-toggle-switch-check-bg);
+  border: 0.2rem solid var(--form-toggle-switch-check-border);
+  box-sizing: border-box;
+  transition: 
+    left 0.3s cubic-bezier(0.4, 0, 0.23, 1),
+    border-color 0.3s cubic-bezier(0.4, 0, 0.23, 1);
+}
+
+// Check checked 위치
+@mixin form-toggle-switch-check-checked($size) {
+  left: calc(
+    var(--form-toggle-switch-button-width-#{$size}) - 
+    var(--form-toggle-switch-check-size-#{$size}) - 
+    0.2rem
+  );
+  border-color: var(--form-toggle-switch-check-border-checked);
+}
+
+/* ==========================================================================
+   Toggle Switch Component
+========================================================================== */
+
+.krds-form-toggle-switch {
+  @include form-toggle-switch-color-variable();
+  
+  position: relative;
+  display: inline-flex;
+  
+  @include form-toggle-switch-size-variable();
+
+  // 기본 사이즈: large
+  $default-size: large;
+
+  // Focus 스타일
+  &.focus {
+    [type="checkbox"] ~ label .switch-toggle {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+  }
+
+  // Checkbox 숨김
+  [type="checkbox"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+
+    // Label
+    ~ label {
+      @include form-toggle-switch-label(#{$default-size});
+      
+      .switch-toggle {
+        @include form-toggle-switch-button(#{$default-size});
+        
+        // KRDS 기본 체크 스타일 (Remix Icon 제외)
+        & > i:not([class*="ri-"]) {
+          @include form-toggle-switch-check(#{$default-size});
+          
+          // KRDS 아이콘 (mask-image 방식)
+          &::before {
+            content: "";
+            display: block;
+            width: 1rem;
+            height: 1rem;
+            background-color: var(--form-toggle-switch-button-bg);
+            mask-image: url(/assets/icons/krds/resources/img/component/icon/ico_switch_off.svg);
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            transition: background-color 0.3s cubic-bezier(0.4, 0, 0.23, 1);
+          }
+        }
+        
+        // Remix Icon 전용 스타일
+        & > i[class*="ri-"] {
+          position: absolute;
+          top: 50%;
+          left: 0.4rem;
+          transform: translateY(-50%);
+          font-size: 1.4rem;
+          color: var(--color-text);
+          transition: left 0.3s cubic-bezier(0.4, 0, 0.23, 1);
+        }
+      }
+    }
+
+    // Checked 상태
+    &:checked {
+      ~ label {
+        .switch-toggle {
+          background-color: var(--form-toggle-switch-button-bg-checked);
+          
+          // KRDS 체크 스타일
+          & > i:not([class*="ri-"]) {
+            @include form-toggle-switch-check-checked(#{$default-size});
+            
+            &::before {
+              background-color: var(--form-toggle-switch-check-border-checked);
+              mask-image: url(/assets/icons/krds/resources/img/component/icon/ico_switch_on.svg);
+            }
+          }
+          
+          // Remix Icon 이동
+          & > i[class*="ri-"] {
+            left: calc(
+              var(--form-toggle-switch-button-width-#{$default-size}) - 
+              1.4rem - 
+              0.4rem
+            );
+          }
+        }
+      }
+    }
+
+    // Disabled 상태
+    &:disabled {
+      ~ label {
+        color: var(--form-toggle-switch-color-text-disabled);
+        cursor: not-allowed;
+        
+        .switch-toggle {
+          background-color: var(--form-toggle-switch-button-bg-disabled);
+          
+          // KRDS 체크 스타일
+          & > i:not([class*="ri-"]) {
+            background-color: var(--form-toggle-switch-check-bg-disabled);
+            border-color: var(--form-toggle-switch-button-bg-disabled);
+            
+            &::before {
+              background-color: var(--form-toggle-switch-button-bg-disabled);
+            }
+          }
+          
+          // Remix Icon 비활성화
+          & > i[class*="ri-"] {
+            opacity: 0.5;
+          }
+        }
+      }
+    }
+
+    // Focus-visible (키보드 포커스)
+    &:focus-visible {
+      ~ label .switch-toggle {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+      }
+    }
+  }
+}
+
+/* Dark 모드 */
+[data-theme="dark"] .krds-form-toggle-switch {
+  @include form-toggle-switch-color-dark();
+}

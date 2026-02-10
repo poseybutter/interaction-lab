@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "fade pattern export schema",
+  "type": "object",
+  "required": ["patternId", "engine", "options", "exportedAt"],
+  "properties": {
+    "patternId": {
+      "type": "string",
+      "const": "fade"
+    },
+    "engine": {
+      "type": "string",
+      "enum": ["vanilla"]
+    },
+    "exportedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "options": {
+      "type": "object",
+      "required": ["duration", "delay", "easing", "fromOpacity"],
+      "properties": {
+        "duration": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 8000,
+          "description": "애니메이션 시간(ms)"
+        },
+        "delay": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 8000,
+          "description": "시작 지연(ms)"
+        },
+        "easing": {
+          "type": "string",
+          "description": "CSS easing 문자열(ease, linear, cubic-bezier 등)"
+        },
+        "fromOpacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "시작 opacity(0~1)"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
+

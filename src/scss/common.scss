@@ -1,0 +1,45 @@
+/* 회사 엔트리 파일(common.scss)
+  - base/layout/components/pages는 “회사 공통(수정 금지)” 영역으로 취급
+  - Interaction Lab(발췌)은 src/scss/interaction 폴더만 복사하면 끝
+*/
+
+/* Base (mixins first) */
+@use "./base/mixins";
+@use "./base/common";
+@use "./base/default";
+
+/* Viewer용 토큰 */
+@use "./base/variables";
+@use "./base/motion-tokens";
+
+/* Utilities */
+@use "./base/utilities";
+
+/* layout */
+@use "./layout/grid";
+@use "./layout/header";
+@use "./layout/sidebar";
+
+/* components */
+@use "./components/icon";
+@use "./components/switch";
+@use "./components/button";
+@use "./components/modal";
+@use "./components/form";
+@use "./components/krds";
+@use "./components/admin";
+@use "./components/card";
+@use "./components/table";
+@use "./components/home";
+@use "./components/code-block";
+@use "./components/accordion";
+
+/* pages/ (페이지 단위 스타일) */
+@use "./pages/demo-lab";
+@use "./pages/patterns";
+
+/* KRDS Tokens (CSS 변수 정의)
+  - @use 규칙 때문에 파일 하단에서 import
+*/
+@import "../krds-tokens.css";
+

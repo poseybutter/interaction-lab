@@ -1,0 +1,228 @@
+/* ==========================================================================
+  components/_form.scss
+  - KRDS 마크업 기반 입력/버튼 유틸
+========================================================================== */
+
+@use "../base/mixins" as *;
+
+/* Label */
+.krds-field-label {
+  display: block;
+  margin: 0 0 0.8rem;
+  font-size: 1.3rem;
+  color: var(--color-muted);
+}
+
+.krds-field-control {
+  position: relative;
+}
+
+/* Input (검색 전용, GPT 스타일) */
+.krds-field-input,
+.krds-input {
+  @include input-base;
+  padding: 0 4.0rem 0 1.4rem;
+  
+  // 다크 모드 기본
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e5e7eb;
+  
+  // 라이트 모드
+  html[data-theme="light"] & {
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    color: #1f2937;
+  }
+  
+  &::placeholder {
+    color: #6b7280;
+    opacity: 0.6;
+    
+    html[data-theme="light"] & {
+      color: #9ca3af;
+    }
+  }
+}
+
+/* 삭제 버튼 */
+.btn-delete-input {
+  @include flex-center;
+  @include square(2.4rem);
+  position: absolute;
+  top: 50%;
+  right: 1.0rem;
+  transform: translateY(-50%);
+  background: rgba(148, 163, 184, 0.22);
+  color: var(--color-text);
+  border-radius: 999px;
+  
+  &:hover {
+    background: rgba(148, 163, 184, 0.42);
+  }
+  
+  &:focus-visible {
+    @include focus-outline;
+  }
+  
+  html[data-theme="dark"] & {
+    background: rgba(148, 163, 184, 0.16);
+    
+    &:hover {
+      background: rgba(148, 163, 184, 0.28);
+    }
+  }
+  
+  // 아이콘 스타일
+  .svg-icon,
+  .ico-delete-fill {
+    mask-image: none;
+    background-image: url(/assets/icons/krds/resources/img/component/icon/ico_delete_fill.svg);
+    background-color: transparent !important;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}
+
+/* ==========================================================================
+  KRDS 토글 스위치
+========================================================================== */
+$switch-sizes: (
+  default: (
+    w: 4.8rem,
+    h: 2.8rem,
+    knob: 2.4rem
+  ),
+  medium: (
+    w: 4.4rem,
+    h: 2.6rem,
+    knob: 2.2rem
+  ),
+  large: (
+    w: 5.2rem,
+    h: 3.0rem,
+    knob: 2.6rem
+  )
+);
+
+.krds-form-toggle-switch {
+  $default: map-get($switch-sizes, default);
+  --tg-w: #{map-get($default, w)};
+  --tg-h: #{map-get($default, h)};
+  --tg-knob: #{map-get($default, knob)};
+  --tg-pad: 0.2rem;
+  --tg-shift: calc(var(--tg-w) - var(--tg-knob) - (var(--tg-pad) * 2));
+  
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  
+  @each $size, $values in $switch-sizes {
+    @if $size != default {
+      &.#{$size} {
+        --tg-w: #{map-get($values, w)};
+        --tg-h: #{map-get($values, h)};
+        --tg-knob: #{map-get($values, knob)};
+      }
+    }
+  }
+  
+  > input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+    
+    &:checked + label .switch-toggle {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      
+      > i:not([class*="ri-"]) {
+        transform: translateX(var(--tg-shift));
+        
+        &::before {
+          content: "✓";
+          color: var(--color-primary);
+        }
+      }
+      
+      > i[class*="ri-"] {
+        left: calc(var(--tg-w) - 1.4rem - 0.4rem);
+      }
+    }
+    
+    &:disabled + label {
+      opacity: 0.6;
+      cursor: not-allowed;
+      
+      .switch-toggle {
+        background: color-mix(in srgb, var(--color-border) 60%, transparent);
+        border-color: color-mix(in srgb, var(--color-border) 80%, transparent);
+        
+        > i:not([class*="ri-"])::before {
+          color: color-mix(in srgb, var(--color-muted) 55%, transparent);
+        }
+      }
+    }
+    
+    &:focus-visible + label .switch-toggle {
+      @include focus-outline;
+    }
+  }
+  
+  > label {
+    @include flex-center;
+    gap: 0.8rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  .switch-toggle {
+    @include flex-center;
+    width: var(--tg-w);
+    height: var(--tg-h);
+    border-radius: 999px;
+    border: 1px solid var(--switch-border);
+    background: var(--switch-bg);
+    position: relative;
+    padding: var(--tg-pad);
+    transition:
+      background var(--motion-duration-fast) var(--motion-ease-standard),
+      border-color var(--motion-duration-fast) var(--motion-ease-standard);
+    
+    // 기본 체크 스타일
+    > i:not([class*="ri-"]) {
+      @include circle(var(--tg-knob));
+      background: var(--switch-thumb-bg);
+      position: relative;
+      transform: translateX(0);
+      transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
+      
+      &::before {
+        @include flex-center;
+        content: "";
+        position: absolute;
+        inset: 0;
+        font-size: 1.4rem;
+        line-height: 1;
+        color: color-mix(in srgb, var(--color-muted) 85%, transparent);
+      }
+    }
+    
+    // Remix Icon 스타일
+    > i[class*="ri-"] {
+      position: absolute;
+      top: 50%;
+      left: 0.4rem;
+      transform: translateY(-50%);
+      font-size: 1.4rem;
+      color: var(--color-text);
+      transition: left var(--motion-duration-fast) var(--motion-ease-standard);
+    }
+  }
+}

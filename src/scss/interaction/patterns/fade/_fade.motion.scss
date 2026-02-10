@@ -1,0 +1,11 @@
+/* Fade 패턴 모션 정의 */
+
+.is-fade.is-fade-animating{
+  animation: interaction-fade-in var(--fade-duration) var(--fade-easing) var(--fade-delay) both;
+}
+
+@keyframes interaction-fade-in{
+  from{opacity: var(--fade-from-opacity)}
+  to{opacity: 1}
+}
+

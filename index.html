@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interaction Lab | KRDS Interaction Presets</title>
+  <meta name="description" content="퍼블리셔가 그대로 복사해 쓰는 인터랙션 프리셋 Lab (KRDS 마크업 기반)">
+
+  <!-- 테마 초기화(플래시 방지): 첫 페인트 전에 data-theme 결정 -->
+  <script>
+    (function () {
+      try {
+        var savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+
+  <!-- 아이콘(Webfont): 기존 리소스 재사용 -->
+  <link rel="stylesheet" href="/assets/icons/remixicon/fonts/remixicon.css">
+
+  <!-- React Viewer 엔트리 -->
+  <script type="module" src="/app/main.jsx"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 바로가기</a>
+
+  <!-- React가 마운트되는 루트 -->
+  <div id="app" class="app-shell"></div>
+</body>
+</html>

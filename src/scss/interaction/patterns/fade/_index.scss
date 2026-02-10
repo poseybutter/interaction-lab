@@ -1,0 +1,12 @@
+/* Fade 패턴 진입점
+  - 퍼블리셔는 이 파일만 import 하면 되도록 구성한다.
+  - 의존성은 interaction/base 내부로만 제한한다.
+*/
+
+@import "../../base/motion-tokens";
+@import "../../base/mixins";
+
+@import "./fade.base";
+@import "./fade.motion";
+@import "./fade.a11y";
+

@@ -1,0 +1,147 @@
+/* ==========================================================================
+  components/_card.scss
+  - 기본값: 라이트 모드, 다크 모드는 오버라이드
+========================================================================== */
+
+.card-grid{
+  display:grid;
+  gap:var(--space-4);
+  grid-template-columns:repeat(auto-fit, minmax(24rem, 1fr));
+}
+
+/* Card - 라이트 모드 기본값 */
+.card{
+  border:1px solid #e5e7eb;
+  background:#ffffff;
+  border-radius:var(--radius-lg);
+  padding:var(--space-4);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover{
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-color: #2563eb;
+}
+
+.card-title{
+  margin:0 0 var(--space-2);
+  font-size:1.9rem;
+  color:#1f2937;
+}
+
+.card-title-sub{
+  display:block;
+  font-size:1.4rem;
+  font-weight:400;
+  color:#6b7280;
+  margin-top:0.4rem;
+}
+
+.card-desc{
+  margin:0 0 var(--space-3);
+  color:#6b7280;
+  line-height:1.6;
+}
+
+.card-link{
+  color:#2563eb;
+  text-decoration:none;
+  font-weight:500;
+}
+
+.card-link:hover{
+  text-decoration:underline;
+  color:#1d4ed8;
+}
+
+/* Callout - 라이트 모드 기본값 */
+.callout{
+  border:1px solid #e5e7eb;
+  background:#f9fafb;
+  border-radius:var(--radius-md);
+  padding:var(--space-4);
+}
+
+.callout-warn{
+  border-color:#fca5a5;
+  background:#fef2f2;
+}
+
+.callout-title{
+  margin:0 0 var(--space-2);
+  font-size:1.7rem;
+  color:#1f2937;
+}
+
+.callout-desc{
+  margin:0;
+  color:#6b7280;
+  line-height:1.6;
+}
+
+.list{
+  margin:0;
+  padding-left:1.8rem;
+  color:#6b7280;
+  line-height:1.8;
+}
+
+.list li{
+  margin-bottom:0.6rem;
+}
+
+.demo-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:var(--space-2);
+}
+
+/* Dark Mode 오버라이드 */
+html[data-theme="dark"] .card{
+  border-color:var(--color-border);
+  background:linear-gradient(180deg, rgba(17,24,39,.80), rgba(15,23,42,.50));
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+html[data-theme="dark"] .card:hover{
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme="dark"] .card-title{
+  color:var(--color-text);
+}
+
+html[data-theme="dark"] .card-desc{
+  color:var(--color-muted);
+}
+
+html[data-theme="dark"] .card-link{
+  color:var(--color-primary-2);
+}
+
+html[data-theme="dark"] .card-link:hover{
+  color:#60a5fa;
+}
+
+html[data-theme="dark"] .callout{
+  border-color:var(--color-border);
+  background:rgba(255,255,255,.04);
+}
+
+html[data-theme="dark"] .callout-warn{
+  border-color:rgba(239,68,68,.35);
+  background:rgba(239,68,68,.08);
+}
+
+html[data-theme="dark"] .callout-title{
+  color:var(--color-text);
+}
+
+html[data-theme="dark"] .callout-desc{
+  color:var(--color-muted);
+}
+
+html[data-theme="dark"] .list{
+  color:var(--color-muted);
+}

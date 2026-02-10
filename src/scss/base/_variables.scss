@@ -1,0 +1,189 @@
+/* ==========================================================================
+  base/_variables.scss
+  - Viewer용 or 공통 토큰(색상/간격/폰트/모션/컴포넌트 토큰 등)
+  - 퍼블리셔가 가져갈 interaction 모듈과는 분리
+========================================================================== */
+
+@charset "UTF-8";
+
+/* 폰트: 외부 CDN 금지, 로컬 웹폰트만 사용 */
+@font-face{
+  font-family:"Pretendard GOV";
+  src:
+    url("/assets/fonts/PretendardGov/PretendardGOV-Regular.subset.woff2") format("woff2"),
+    url("/assets/fonts/PretendardGov/PretendardGOV-Regular.subset.woff") format("woff");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Pretendard GOV";
+  src:
+    url("/assets/fonts/PretendardGov/PretendardGOV-Medium.subset.woff2") format("woff2"),
+    url("/assets/fonts/PretendardGov/PretendardGOV-Medium.subset.woff") format("woff");
+  font-weight:500;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Pretendard GOV";
+  src:
+    url("/assets/fonts/PretendardGov/PretendardGOV-Bold.subset.woff2") format("woff2"),
+    url("/assets/fonts/PretendardGov/PretendardGOV-Bold.subset.woff") format("woff");
+  font-weight:700;
+  font-style:normal;
+  font-display:swap;
+}
+
+/* 토큰 */
+:root{
+  /* Color */
+  /* KRDS 토큰 기반 매핑(기본: 라이트) */
+  --color-bg: var(--krds-light-color-background-gray-subtler, #f8fafc);
+  /* 호환 alias(기존 코드에서 --color-background를 쓰는 경우 대비) */
+  --color-background: var(--color-bg);
+  --color-surface: var(--krds-light-color-surface-white, #ffffff);
+  --color-surface-2: var(--krds-light-color-surface-gray-subtler, #f1f5f9);
+  --color-text: var(--krds-light-color-text-basic, #0f172a);
+  --color-muted: var(--krds-light-color-text-subtle, #475569);
+  /* 호환 alias(기존 코드에서 --color-text-secondary를 쓰는 경우 대비) */
+  --color-text-secondary: var(--color-muted);
+  --color-border: var(--krds-light-color-border-gray-light, rgba(15, 23, 42, .12));
+  --color-primary: var(--krds-light-color-element-primary, #2563eb);
+  --color-primary-2: var(--krds-light-color-link-hover, #1d4ed8);
+  --color-danger: var(--krds-light-color-border-danger, #dc2626);
+
+  /* Space */
+  --space-1: .4rem;
+  --space-2: .8rem;
+  --space-3: 1.2rem;
+  --space-4: 1.6rem;
+  --space-5: 2.4rem;
+  --space-6: 3.2rem;
+
+  /* Radius */
+  --radius-sm: .6rem;
+  --radius-md: 1.0rem;
+  --radius-lg: 1.4rem;
+
+  /* Motion */
+  --motion-duration-fast: 140ms;
+  --motion-duration-md: 220ms;
+  --motion-duration-slow: 360ms;
+  --motion-ease-standard: cubic-bezier(.2,.8,.2,1);
+  --motion-ease-emphasized: cubic-bezier(.2,0,0,1);
+  --motion-ease-linear: linear;
+
+  /* Shadow */
+  --shadow-sm: 0 6px 20px rgba(15, 23, 42, .10);
+
+  /* KRDS Layout Tokens */
+  --krds-gap-2: 0.8rem;
+  --krds-gap-3: 1.2rem;
+  --krds-padding-6: 2.4rem;
+  
+  /* KRDS Radius */
+  --krds-radius-medium1: 1.0rem;
+  --krds-radius-medium2: 0.8rem;
+  --krds-radius-medium3: 0.6rem;
+  --krds-radius-max: 999px;
+  
+  /* KRDS Size Height */
+  --krds-size-height-6: 3.6rem;
+  --krds-size-height-7: 4.4rem;
+  --krds-size-height-8: 5.2rem;
+  --krds-size-height-9: 6.0rem;
+  
+  /* KRDS Button Icon Size */
+  --krds-button--icon-size-xlarge: 4.0rem;
+  
+  /* KRDS Icon Size */
+  --krds-icon--size-xsmall: 1.6rem;
+  --krds-icon--size-small: 1.8rem;
+  --krds-icon--size-medium: 2.0rem;
+  --krds-icon--size-large: 2.2rem;
+  --krds-icon--size-xlarge: 2.4rem;
+  
+  /* KRDS Font Size */
+  --krds-pc-font-size-label-small: 1.3rem;
+  --krds-pc-font-size-label-medium: 1.4rem;
+  --krds-pc-font-size-label-large: 1.6rem;
+  --krds-mobile-font-size-label-small: 1.3rem;
+  --krds-mobile-font-size-label-medium: 1.4rem;
+  --krds-mobile-font-size-label-large: 1.6rem;
+
+  /* Layout */
+  --nav-width: 30rem;
+
+  /* Typography tokens */
+  --font-base: "Pretendard GOV",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --line-height-body: 1.6;
+  --line-height-title: 1.25;
+  --font-size-h1: 3.2rem;
+  --font-size-h2: 2.4rem;
+  --font-size-h3: 2.0rem;
+  --font-size-h4: 1.8rem;
+  --font-size-h5: 1.6rem;
+  --font-size-h6: 1.4rem;
+  --font-size-body: 1.6rem;
+  --font-size-small: 1.4rem;
+  --font-size-caption: 1.2rem;
+
+  /* base alias(레거시/퍼블리셔 발췌 편의) */
+  --ff: var(--font-base);
+  --fs: 1.8rem;
+  --lh: 1.5;
+  --gray700: #616161;
+  --cl: var(--color-text, var(--gray700));
+
+  /* Switch(라이트) */
+  --switch-bg: rgba(15, 23, 42, .18);
+  --switch-border: rgba(15, 23, 42, .18);
+  --switch-bg-checked: #2563eb;
+  --switch-border-checked: rgba(37, 99, 235, .35);
+  --switch-thumb-bg: #ffffff;
+  --switch-thumb-border: rgba(15, 23, 42, .10);
+
+  /* Code Block 토큰(라이트) */
+  --code-bg: #0f172a;
+  --code-header-bg: rgba(15, 23, 42, .92);
+  --code-text: #e5e7eb;
+  --code-muted: rgba(229,231,235,.75);
+  --code-border: rgba(255,255,255,.14);
+  --code-radius: 1.2rem;
+}
+
+html[data-theme="dark"]{
+  /* KRDS “inverse” 토큰 기반 다크 매핑(원본에 다크 토큰이 들어오면 여기만 교체) */
+  --color-bg: var(--krds-light-color-background-inverse, #0b0f17);
+  --color-surface: var(--krds-light-color-surface-inverse, #111827);
+  --color-surface-2: var(--krds-color-light-gray-95, #0f172a);
+  --color-text: var(--krds-light-color-text-basic-inverse, #e5e7eb);
+  --color-muted: var(--krds-light-color-text-subtle-inverse, #9ca3af);
+  --color-border: rgba(255,255,255,.10);
+  --color-primary: var(--krds-light-color-element-primary, #3b82f6);
+  --color-primary-2: var(--krds-light-color-link-default, #60a5fa);
+  --color-danger: #ef4444;
+
+  --shadow-sm: 0 6px 20px rgba(0,0,0,.35);
+
+  /* Switch(다크) */
+  --switch-bg: rgba(255,255,255,.16);
+  --switch-border: rgba(255,255,255,.12);
+  --switch-bg-checked: #3b82f6;
+  --switch-border-checked: rgba(59, 130, 246, .40);
+  --switch-thumb-bg: #ffffff;
+  --switch-thumb-border: rgba(0,0,0,.10);
+
+  /* Code Block 토큰(다크) */
+  --code-bg: #0b1220;
+  --code-header-bg: rgba(11, 18, 32, .92);
+  --code-text: #e5e7eb;
+  --code-muted: rgba(229,231,235,.75);
+  --code-border: rgba(255,255,255,.12);
+}
+

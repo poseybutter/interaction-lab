@@ -1,0 +1,273 @@
+/* ==========================================================================
+  pages/_demo-lab.scss
+  - DemoLabPage 전용 스타일(인라인 스타일 제거 목적)
+========================================================================== */
+
+.lab-split{
+  display:flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  align-items:flex-start;
+}
+
+.lab-stack{
+  display:flex;
+  flex-direction:column;
+}
+
+/* Controls: 2열 자동 래핑 */
+.lab-stack .fieldset{
+  flex-direction: row; /* KRDS 기본 column override */
+  flex-wrap: wrap;
+  align-items: flex-start;
+  width: 100%;
+}
+.lab-stack .fieldset > .form-group{
+  /* 정확히 2열(각 50%) */
+  flex: 0 0 calc(50% - (var(--space-4) / 2));
+  max-width: calc(50% - (var(--space-4) / 2));
+}
+.lab-stack .fieldset > .form-group.lab-span-2{
+  flex-basis: 100%;
+  max-width: 100%;
+}
+.lab-stack .fieldset > .g-desc{
+  flex: 1 1 100%;
+}
+
+.lab-controls{
+  flex: 0 0 36rem;
+  min-width:0;
+}
+
+.lab-main{
+  flex: 1 1 auto;
+  width: 100%;
+  min-width:0;
+}
+
+.lab-preview-frame{
+  border:1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow:hidden;
+}
+
+.lab-preview-iframe{
+  width:100%;
+  height:420px;
+  border:0;
+  background:transparent;
+}
+.lab-preview-iframe.is-tall{height:520px}
+
+.lab-mt-3{margin-top: var(--space-3)}
+.lab-mt-2{margin-top: var(--space-2)}
+.lab-mt-6{margin-top: var(--space-6)}
+
+.lab-easing-row{
+  display:flex;
+  gap: var(--space-2);
+  align-items:center;
+}
+.lab-easing-select{
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.lab-easing-select.is-custom{
+  flex: 0 0 18rem;
+}
+.lab-easing-input{
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.lab-easing-graph{
+  margin-top: var(--space-2);
+}
+.lab-easing-graph-svg{
+  width: 100%;
+  max-width: 48rem;
+  height: auto;
+  display:block;
+}
+.lab-easing-graph-bg{
+  fill: color-mix(in srgb, var(--color-surface) 45%, transparent);
+  stroke: color-mix(in srgb, var(--color-border) 70%, transparent);
+}
+.lab-easing-graph-grid{
+  stroke: color-mix(in srgb, var(--color-border) 55%, transparent);
+  stroke-width: 1;
+  opacity: .55;
+}
+.lab-easing-graph-axis{
+  stroke: color-mix(in srgb, var(--color-border) 75%, transparent);
+  stroke-width: 1.2;
+  opacity: .8;
+}
+.lab-easing-graph-line{
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+.lab-easing-graph-line-bg{
+  fill:none;
+  stroke: color-mix(in srgb, var(--color-muted) 55%, transparent);
+  stroke-width: 2;
+  opacity: .55;
+}
+.lab-easing-graph-dot{
+  fill: color-mix(in srgb, var(--color-primary) 85%, #ffffff);
+  stroke: color-mix(in srgb, #000000 35%, transparent);
+  stroke-width: 1;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,.25));
+}
+.lab-easing-graph-empty{
+  fill: var(--color-muted);
+  font-size: 12px;
+}
+
+.lab-ease-menu{
+  display:flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.lab-ease-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: .6rem 1.0rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--color-border) 80%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 45%, transparent);
+  color: inherit;
+  cursor:pointer;
+  font: inherit;
+}
+.lab-ease-btn:hover{
+  border-color: color-mix(in srgb, var(--color-primary) 35%, var(--color-border));
+}
+.lab-ease-btn.is-active{
+  border-color: color-mix(in srgb, var(--color-primary) 70%, var(--color-border));
+  background: rgba(37,99,235,.12);
+}
+html[data-theme="dark"] .lab-ease-btn.is-active{
+  background: rgba(59,130,246,.18);
+}
+.lab-ease-sub{width: 100%;}
+.lab-ease-steps{
+  display:flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.lab-ease-steps > .krds-input{
+  flex: 0 0 14rem;
+}
+
+.lab-trigger-row{
+  display:flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: center;
+}
+.lab-trigger-field{flex: 0 0 auto}
+.lab-trigger-field.is-grow{flex: 1 1 22rem; min-width: 0}
+
+.lab-ease-layout{
+  display:flex;
+  gap: var(--space-4);
+  align-items:flex-start;
+}
+.lab-ease-left{
+  flex: 0 0 40rem;
+  min-width: 32rem;
+}
+.lab-ease-right{
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.lab-ease-right .lab-easing-graph{display:none} /* 안전장치: 그래프가 우측에 중복될 일 없음 */
+
+@media (max-width: 720px){
+  .lab-ease-layout{flex-direction: column;}
+  .lab-ease-left{flex: 0 0 auto; min-width: 0; width: 100%;}
+}
+
+.lab-form-tit{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap: var(--space-2);
+}
+.lab-form-tit-sub{
+  font-size: 1.2rem;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+/* Export Tabs */
+.lab-export-tabs{
+  margin-bottom: var(--space-4);
+}
+.lab-export-tabs .tab{border-bottom: 1px solid var(--color-border)}
+.lab-export-tabs .tab ul{display:flex; gap: var(--space-4); list-style:none; margin:0; padding:0}
+.lab-export-tabs .tab li{margin:0; padding:0}
+.lab-export-tabs .btn-tab{
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 1.0rem 0.2rem;
+  color: var(--color-muted);
+  font: inherit;
+  border-bottom: 2px solid transparent;
+}
+.lab-export-tabs .btn-tab:hover{color: var(--color-text)}
+.lab-export-tabs .tab li.active .btn-tab{
+  color: var(--color-text);
+  border-bottom-color: var(--color-primary);
+}
+
+.lab-export-tabs .tab-conts-wrap{padding-top: var(--space-4)}
+.lab-export-tabs .tab-conts{margin:0}
+
+/* Export Accordion (KRDS markup) */
+.lab-export-acc{
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-surface) 55%, transparent);
+  overflow: hidden;
+}
+.lab-export-acc .accordion-item + .accordion-item{
+  border-top: 1px solid var(--color-border);
+}
+.lab-export-acc .accordion-header{
+  margin: 0;
+}
+.lab-export-acc .btn-accordion{
+  width: 100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-3);
+  border: 0;
+  background: transparent;
+  color: var(--color-muted);
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+.lab-export-acc .btn-accordion:hover{color: var(--color-text)}
+.lab-export-acc .btn-accordion:focus-visible{
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+.lab-export-acc .btn-accordion[aria-expanded="true"]{
+  color: var(--color-text);
+}
+.lab-export-acc .accordion-collapse.collapse{display:none}
+.lab-export-acc .accordion-collapse.collapse.show{display:block}
+.lab-export-acc .accordion-body{
+  padding: 0 var(--space-3) var(--space-3);
+}
+

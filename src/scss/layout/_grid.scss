@@ -1,0 +1,107 @@
+/* ==========================================================================
+  layout/_grid.scss
+  - 앱 전체 레이아웃/페이지 공통
+========================================================================== */
+
+/* 배경은 프로젝트 정체성(UI) */
+body{
+  background:
+    radial-gradient(1200px 600px at 20% 0%, rgba(37,99,235,.10), transparent 60%),
+    radial-gradient(900px 500px at 90% 10%, rgba(37,99,235,.08), transparent 55%),
+    var(--color-bg);
+}
+
+.app-shell{min-height:100svh}
+.app-layout{min-height:calc(100svh - var(--header-h, 6.4rem)); position:relative}
+.app-content{min-width:0; display:flex; flex-direction:column; min-height:calc(100svh - var(--header-h, 6.4rem))}
+.app-main{flex:1; min-width:0}
+
+.app-page{
+  max-width:108rem;
+  margin:0 auto;
+  padding:var(--space-6) var(--space-5);
+}
+
+.app-footer{
+  border-top:1px solid var(--color-border);
+  background:transparent;
+}
+.app-footer-inner{
+  max-width:120rem;
+  margin:0 auto;
+  padding:var(--space-4);
+}
+.app-footer-text{margin:0; color:var(--color-muted); font-size:1.3rem}
+
+/* KRDS 페이지 제목 구조 */
+.page-title-wrap{margin:0 0 var(--space-5)}
+
+.h-tit{
+  margin:0 0 var(--space-3);
+  font-size:3.0rem;
+  font-weight:700;
+  letter-spacing:-.02em;
+  display:flex;
+  align-items:center;
+  gap: var(--space-2);
+  flex-wrap:wrap;
+}
+
+.badge-text{
+  display:inline-flex;
+  font-size:1.6rem;
+  font-weight:400;
+  color:#6b7280;
+  padding:.4rem .8rem;
+  border-radius: var(--radius-sm);
+  background:#f3f4f6;
+  border:1px solid #e5e7eb;
+}
+html[data-theme="dark"] .badge-text{color:var(--color-muted); background:rgba(255,255,255,.04); border-color:var(--color-border)}
+
+.g-info-box{
+  padding:var(--space-4);
+  border-radius: var(--radius-md);
+  border:1px solid #e5e7eb;
+  background:#f9fafb;
+}
+html[data-theme="dark"] .g-info-box{border-color:var(--color-border); background:rgba(0,0,0,.12)}
+
+.g-desc{
+  margin:0;
+  color:#6b7280;
+  line-height: var(--line-height-body);
+}
+html[data-theme="dark"] .g-desc{color:var(--color-muted)}
+
+.sec-tit{
+  margin:var(--space-5) 0 var(--space-3);
+  font-size:2.0rem;
+  font-weight:700;
+  letter-spacing:-.01em;
+  color:#1f2937;
+}
+html[data-theme="dark"] .sec-tit{color:var(--color-text)}
+
+.g-tit{
+  margin:var(--space-4) 0 var(--space-2);
+  font-size:1.6rem;
+  font-weight:600;
+  color:#1f2937;
+}
+html[data-theme="dark"] .g-tit{color:var(--color-text)}
+
+/* 기존 스타일 (하위 호환) */
+.page-title{margin:0 0 var(--space-2); font-size:3.0rem; letter-spacing:-.02em}
+.page-lead{margin:0 0 var(--space-5); color:#6b7280; max-width:78rem}
+html[data-theme="dark"] .page-lead{color:var(--color-muted)}
+
+/* 반응형 */
+@media (max-width: 860px){
+  .app-page{padding:var(--space-5) var(--space-4)}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{scroll-behavior:auto !important}
+}
+

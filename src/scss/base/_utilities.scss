@@ -1,0 +1,128 @@
+/* ==========================================================================
+  utilities.scss
+  - 자주 사용하는 유틸리티 클래스
+========================================================================== */
+
+/* Margin 유틸리티 */
+// 특정 값들 (자주 사용하는 rem 단위)
+$specific-margins: (
+  8: 0.8rem,
+  16: 1.6rem,
+  24: 2.4rem,
+  32: 3.2rem,
+  36: 3.6rem,
+  48: 4.8rem,
+  64: 6.4rem
+);
+
+@each $key, $value in $specific-margins {
+  .mt-#{$key} { margin-top: $value; }
+  .mb-#{$key} { margin-bottom: $value; }
+  .ml-#{$key} { margin-left: $value; }
+  .mr-#{$key} { margin-right: $value; }
+  .mx-#{$key} { 
+    margin-left: $value; 
+    margin-right: $value; 
+  }
+  .my-#{$key} { 
+    margin-top: $value; 
+    margin-bottom: $value; 
+  }
+}
+
+// 10~100까지 (0.1rem 단위 = 1px 단위)
+@for $i from 10 through 100 {
+  .mt-#{$i} { margin-top: #{$i * 0.1}rem; }
+  .mb-#{$i} { margin-bottom: #{$i * 0.1}rem; }
+  .ml-#{$i} { margin-left: #{$i * 0.1}rem; }
+  .mr-#{$i} { margin-right: #{$i * 0.1}rem; }
+}
+
+/* Padding 유틸리티 */
+@each $key, $value in $specific-margins {
+  .pt-#{$key} { padding-top: $value; }
+  .pb-#{$key} { padding-bottom: $value; }
+  .pl-#{$key} { padding-left: $value; }
+  .pr-#{$key} { padding-right: $value; }
+  .px-#{$key} { 
+    padding-left: $value; 
+    padding-right: $value; 
+  }
+  .py-#{$key} { 
+    padding-top: $value; 
+    padding-bottom: $value; 
+  }
+}
+
+@for $i from 10 through 100 {
+  .pt-#{$i} { padding-top: #{$i * 0.1}rem; }
+  .pb-#{$i} { padding-bottom: #{$i * 0.1}rem; }
+  .pl-#{$i} { padding-left: #{$i * 0.1}rem; }
+  .pr-#{$i} { padding-right: #{$i * 0.1}rem; }
+}
+
+/* Flex 유틸리티 */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-nowrap { flex-wrap: nowrap; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.items-end { align-items: flex-end; }
+.justify-center { justify-content: center; }
+.justify-start { justify-content: flex-start; }
+.justify-end { justify-content: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+
+/* Gap 유틸리티 */
+$gaps: (
+  1: var(--space-1),
+  2: var(--space-2),
+  3: var(--space-3),
+  4: var(--space-4),
+  5: var(--space-5),
+  6: var(--space-6)
+);
+
+@each $key, $value in $gaps {
+  .gap-#{$key} { gap: $value; }
+}
+
+/* Display 유틸리티 */
+.hidden { display: none; }
+.block { display: block; }
+.inline-block { display: inline-block; }
+.grid { display: grid; }
+
+/* Text 유틸리티 */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.text-muted { color: var(--color-muted); }
+.text-primary { color: var(--color-primary); }
+.text-danger { color: var(--color-danger); }
+
+/* Font 유틸리티 */
+.font-normal { font-weight: var(--font-weight-regular); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-bold { font-weight: var(--font-weight-bold); }
+
+/* Width 유틸리티 */
+.w-full { width: 100%; }
+.w-auto { width: auto; }
+.h-full { height: 100%; }
+.h-auto { height: auto; }
+
+/* Screen Reader Only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

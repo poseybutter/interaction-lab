@@ -1,0 +1,12 @@
+/* Fade 패턴 접근성(모션 민감 사용자 대응) */
+
+@include interaction-reduced-motion{
+  .is-fade.is-fade-animating{
+    animation: none;
+  }
+
+  .is-fade{
+    opacity: 1 !important;
+  }
+}
+

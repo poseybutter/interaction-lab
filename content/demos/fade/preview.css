@@ -1,0 +1,94 @@
+.demo-page{
+  min-height:100svh;
+  padding: 2.0rem;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  background:
+    radial-gradient(800px 400px at 10% 0%, rgba(37,99,235,.12), transparent 60%),
+    radial-gradient(700px 360px at 90% 10%, rgba(37,99,235,.08), transparent 55%),
+    #0b1220;
+  color:#e5e7eb;
+}
+
+.demo-stage{
+  max-width: 92rem;
+  margin: 0 auto;
+  min-height: calc(100svh - 4.0rem);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* 프리뷰용 최소 카드 스타일 */
+.krds-card{
+  width: min(62rem, 100%);
+  padding: 2.4rem;
+  border-radius: 1.6rem;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 30px 70px rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+}
+
+.demo-title{margin:0 0 1.0rem; font-size:2.4rem; letter-spacing:-.02em}
+.demo-desc{margin:0 0 1.6rem; color: rgba(229,231,235,.85); line-height:1.6}
+
+/* 버튼(프리뷰용 최소 스타일) */
+.krds-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.6rem;
+  border-radius: 1.0rem;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  color: inherit;
+  cursor:pointer;
+  padding: .8rem 1.1rem;
+  font: inherit;
+}
+.krds-btn:hover{background: rgba(255,255,255,.10)}
+.krds-btn:focus-visible{outline:2px solid #60a5fa; outline-offset:2px}
+.krds-btn.small{font-size:1.3rem}
+
+/* ==========================================================================
+  Demo Fade (표준 메시지 기반)
+  - config는 CSS 변수로 전달
+========================================================================== */
+.is-fade{
+  --lab-duration: 600ms;
+  --lab-delay: 0ms;
+  --lab-easing: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --lab-x: 0px;
+  --lab-y: 0px;
+  --lab-opacity: 0;
+
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  will-change: opacity, transform;
+}
+
+.is-fade.is-fade-ready{
+  opacity: var(--lab-opacity);
+  transform: translate3d(var(--lab-x), var(--lab-y), 0);
+}
+
+.is-fade.is-fade-animating{
+  animation: lab-fade var(--lab-duration) var(--lab-easing) var(--lab-delay) both;
+}
+
+@keyframes lab-fade{
+  from{
+    opacity: var(--lab-opacity);
+    transform: translate3d(var(--lab-x), var(--lab-y), 0);
+  }
+  to{
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .is-fade.is-fade-animating{animation:none}
+  .is-fade{opacity:1 !important; transform:none !important}
+}
+

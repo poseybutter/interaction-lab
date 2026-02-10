@@ -1,0 +1,87 @@
+/* ==========================================================================
+  components/_admin.scss
+========================================================================== */
+
+.admin-layout{
+  display:grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-4);
+}
+.admin-layout-single{grid-template-columns: 1fr}
+@media (max-width: 860px){
+  .admin-layout{grid-template-columns: 1fr}
+}
+.admin-actions{display:flex; flex-wrap:wrap; gap: var(--space-2); margin: 0 0 var(--space-4)}
+.admin-msg{margin:0 0 var(--space-3); font-size:1.3rem; color:var(--color-muted)}
+.admin-msg-ok{color: color-mix(in srgb, var(--color-primary) 70%, var(--color-text))}
+.admin-msg-error{color: var(--color-danger)}
+.admin-add-top{margin-top: var(--space-4)}
+
+/* SortableJS 기반 메뉴 편집 UI */
+.admin-menu{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap: var(--space-2);
+}
+.admin-menu-item{
+  border:1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.admin-menu-row{
+  display:grid;
+  grid-template-columns: 9.8rem 16rem 1fr auto;
+  gap: var(--space-2);
+  align-items:center;
+  padding: var(--space-2) var(--space-3);
+}
+@media (max-width: 860px){
+  .admin-menu-row{grid-template-columns: 1fr auto; grid-auto-rows:auto}
+  .admin-menu-id{grid-column: 1 / -1}
+}
+.admin-menu-vis{color:var(--color-muted)}
+.admin-menu-vis-label{font-size:1.3rem; color:var(--color-muted)}
+.admin-menu-id{font-size:1.2rem; color:var(--color-muted); font-family: var(--font-mono); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.admin-menu-input{
+  width:100%;
+  height:3.6rem;
+  padding:0 1.0rem;
+  border-radius:.8rem;
+  border:1px solid var(--color-border);
+  background: var(--color-surface);
+}
+.admin-menu-btns{display:inline-flex; gap:.6rem; align-items:center; justify-content:flex-end}
+.admin-menu-icon-btn{
+  width:3.2rem;
+  height:3.2rem;
+  border:0;
+  background:transparent;
+  padding:0;
+  border-radius: var(--radius-sm);
+  cursor:pointer;
+  color:inherit;
+}
+.admin-menu-icon-btn:hover{background:rgba(0,0,0,.04)}
+html[data-theme="dark"] .admin-menu-icon-btn:hover{background:rgba(255,255,255,.06)}
+.admin-menu-icon-btn:focus-visible{outline:2px solid var(--color-primary); outline-offset:2px}
+.admin-menu-children{
+  list-style:none;
+  margin:0;
+  padding: var(--space-2) var(--space-3) var(--space-3);
+  display:flex;
+  flex-direction:column;
+  gap: var(--space-2);
+  border-top:1px dashed var(--color-border);
+}
+.admin-menu-children .admin-menu-row{
+  grid-template-columns: 9.8rem 16rem 1fr auto;
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+}
+.admin-menu-item.is-dragging{opacity:.85}
+.admin-preview-nav{border:1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); padding: var(--space-3); max-height: 70svh; overflow:auto}
+

@@ -1,0 +1,82 @@
+.demo-page{
+  min-height:100svh;
+  padding: 2.0rem;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  background:
+    radial-gradient(800px 400px at 10% 0%, rgba(37,99,235,.12), transparent 60%),
+    radial-gradient(700px 360px at 90% 10%, rgba(37,99,235,.08), transparent 55%),
+    #0b1220;
+  color:#e5e7eb;
+}
+
+.demo-stage{
+  max-width: 92rem;
+  margin: 0 auto;
+  min-height: calc(100svh - 4.0rem);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.krds-card{
+  width: min(62rem, 100%);
+  padding: 2.4rem;
+  border-radius: 1.6rem;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 30px 70px rgba(0,0,0,.35);
+  backdrop-filter: blur(10px);
+}
+
+.demo-title{margin:0 0 1.0rem; font-size:2.4rem; letter-spacing:-.02em}
+.demo-desc{margin:0 0 1.6rem; color: rgba(229,231,235,.85); line-height:1.6}
+
+.krds-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.6rem;
+  border-radius: 1.0rem;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.06);
+  color: inherit;
+  cursor:pointer;
+  padding: .8rem 1.1rem;
+  font: inherit;
+}
+.krds-btn:hover{background: rgba(255,255,255,.10)}
+.krds-btn:focus-visible{outline:2px solid #60a5fa; outline-offset:2px}
+.krds-btn.small{font-size:1.3rem}
+
+.is-rotate{
+  --lab-duration: 600ms;
+  --lab-delay: 0ms;
+  --lab-easing: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --lab-from-rotate: -24deg;
+  --lab-opacity: 0;
+
+  opacity: 1;
+  transform: rotate(0deg);
+  transform-origin: center;
+  will-change: opacity, transform;
+}
+
+.is-rotate.is-rotate-ready{
+  opacity: var(--lab-opacity);
+  transform: rotate(var(--lab-from-rotate));
+}
+
+.is-rotate.is-rotate-animating{
+  animation: lab-rotate var(--lab-duration) var(--lab-easing) var(--lab-delay) both;
+}
+
+@keyframes lab-rotate{
+  from{opacity: var(--lab-opacity); transform: rotate(var(--lab-from-rotate))}
+  to{opacity: 1; transform: rotate(0deg)}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .is-rotate.is-rotate-animating{animation:none}
+  .is-rotate{opacity:1 !important; transform:none !important}
+}
+

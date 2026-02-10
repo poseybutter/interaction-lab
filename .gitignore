@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# macOS
+.DS_Store
+.!*
+
+# IDE
+.vscode/
+.idea/
+
+# Compiled CSS (SCSS sources only)
+src/**/*.css
+!src/variables.css
+!src/krds-tokens.css
+
+# Logs
+*.log
+npm-debug.log*
+
+# Vite
+.vite/

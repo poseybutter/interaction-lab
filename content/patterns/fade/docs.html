@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fade Docs</title>
+  <style>
+    body{margin:0;padding:1.6rem;font-family:system-ui,-apple-system,Segoe UI,Roboto,Noto Sans,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;line-height:1.6;background:#fff;color:#0f172a}
+    h1,h2{margin:0 0 1.0rem}
+    p{margin:.6rem 0}
+    code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .box{padding:1.2rem;border:1px solid rgba(15,23,42,.12);border-radius:1.2rem;background:#f8fafc}
+  </style>
+</head>
+<body>
+  <h1>Fade</h1>
+  <div class="box">
+    <p><strong>목적</strong>: 요소가 <code>opacity</code> 기준으로 자연스럽게 나타나는 패턴입니다.</p>
+    <p><strong>원리</strong>: Viewer가 옵션을 전달하면, 실행 코드(<code>pattern.js</code>)가 CSS 변수와 상태 클래스(<code>.is-fade-*</code>)를 갱신해 재생합니다.</p>
+    <p><strong>접근성</strong>: <code>prefers-reduced-motion</code> 환경에서는 애니메이션을 제거합니다.</p>
+  </div>
+
+  <h2 style="margin-top:1.6rem">언제 재생되나요? (시작 조건/트리거)</h2>
+  <div class="box">
+    <p><strong>기본</strong>: 페이지 로드 후 즉시 재생(또는 옵션 변경 시 재생) 형태가 가장 단순합니다.</p>
+    <p><strong>추천</strong>: 실제 서비스에서는 “스크롤 진입 시”처럼 <em>사용 맥락</em>에 맞는 트리거를 두는 편이 안전합니다.</p>
+    <p><strong>예시</strong>: IntersectionObserver로 “뷰포트 진입 시 1회 재생”</p>
+    <pre style="margin:1rem 0 0;white-space:pre-wrap"><code>// 대상: .is-fade
+// CSS는 .is-fade-ready / .is-fade-animating 상태를 지원해야 합니다.
+
+const target = document.querySelector('.is-fade');
+if (target) {
+  // 시작 상태 유지
+  target.classList.add('is-fade-ready');
+
+  const play = () =&gt; {
+    target.classList.remove('is-fade-animating');
+    target.classList.add('is-fade-ready');
+    void target.offsetWidth;
+    target.classList.add('is-fade-animating');
+  };
+
+  const obs = new IntersectionObserver((entries) =&gt; {
+    if (entries[0]?.isIntersecting) {
+      play();
+      obs.disconnect(); // 1회만
+    }
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.2 });
+
+  obs.observe(target);
+}</code></pre>
+    <p style="margin-top:.8rem"><strong>팁</strong>: “시작 지점”을 더 앞당기거나 늦추고 싶다면 <code>rootMargin</code>과 <code>threshold</code>를 조절합니다.</p>
+  </div>
+</body>
+</html>
+

@@ -1,0 +1,201 @@
+/* ==========================================================================
+  mixins.scss
+  - 재사용 가능한 SCSS mixin
+========================================================================== */
+
+// 정사각형 요소
+@mixin square($size) {
+  width: $size;
+  height: $size;
+}
+
+// 원형 요소
+@mixin circle($size) {
+  @include square($size);
+  border-radius: 50%;
+}
+
+// Flexbox 센터 정렬
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// 버튼 기본 스타일
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--krds-gap-2, 0.8rem);
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  
+  &:disabled,
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// 버튼 사이즈
+@mixin button-size($size-name) {
+  $sizes: (
+    small: (
+      height: var(--krds-size-height-6, 3.6rem),
+      font-size: var(--krds-pc-font-size-label-small, 1.3rem)
+    ),
+    medium: (
+      height: var(--krds-size-height-7, 4.4rem),
+      font-size: var(--krds-pc-font-size-label-medium, 1.4rem)
+    ),
+    large: (
+      height: var(--krds-size-height-8, 5.2rem),
+      font-size: var(--krds-pc-font-size-label-large, 1.6rem)
+    ),
+    xlarge: (
+      height: var(--krds-size-height-9, 6rem),
+      font-size: var(--krds-pc-font-size-label-large, 1.6rem)
+    )
+  );
+  
+  $size: map-get($sizes, $size-name);
+  height: map-get($size, height);
+  font-size: map-get($size, font-size);
+}
+
+// 인풋 기본 스타일
+@mixin input-base {
+  width: 100%;
+  height: 4.4rem;
+  padding: 0 1.4rem;
+  border-radius: 0.8rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: inherit;
+  font: inherit;
+  transition:
+    border-color var(--motion-duration-fast) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-fast) var(--motion-ease-standard);
+    
+  &::placeholder {
+    color: color-mix(in srgb, var(--color-muted) 70%, transparent);
+  }
+  
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// 포커스 스타일
+@mixin focus-outline {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+// 카드 스타일
+@mixin card-base {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+// 호버 트랜지션
+@mixin hover-lift {
+  transition: transform var(--motion-duration-fast) var(--motion-ease-standard);
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// 반응형 미디어 쿼리
+@mixin mobile {
+  @media (max-width: 480px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}
+
+// 그리드 레이아웃
+@mixin grid-auto($min-width) {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+}
+
+// 말줄임
+@mixin ellipsis($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+// 스크롤바 스타일
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 0.8rem;
+    height: 0.8rem;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: var(--color-surface-2);
+    border-radius: 0.4rem;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 0.4rem;
+    
+    &:hover {
+      background: var(--color-muted);
+    }
+  }
+}
+
+// KRDS 아이콘 크기
+@mixin icon-size($size-name) {
+  $sizes: (
+    xsmall: var(--krds-icon--size-xsmall, 1.6rem),
+    small: var(--krds-icon--size-small, 1.8rem),
+    medium: var(--krds-icon--size-medium, 2.0rem),
+    large: var(--krds-icon--size-large, 2.2rem),
+    xlarge: var(--krds-icon--size-xlarge, 2.4rem)
+  );
+  
+  $size: map-get($sizes, $size-name);
+  width: $size;
+  height: $size;
+}

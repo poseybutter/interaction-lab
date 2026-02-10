@@ -1,0 +1,48 @@
+/* Accordion (문서형 UX: 예측 가능한 토글 + 명확한 구분) */
+
+.g-acc{
+  border:1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  overflow:hidden;
+}
+
+.g-acc-item + .g-acc-item{border-top:1px solid var(--color-border)}
+
+.g-acc-trigger{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border:0;
+  background:transparent;
+  color:inherit;
+  font:inherit;
+  cursor:pointer;
+  text-align:left;
+}
+.g-acc-trigger:hover{background: rgba(0,0,0,.03)}
+html[data-theme="dark"] .g-acc-trigger:hover{background: rgba(255,255,255,.05)}
+.g-acc-trigger:focus-visible{outline:2px solid var(--color-primary); outline-offset:-2px}
+
+.g-acc-title{font-weight: var(--font-weight-medium)}
+.g-acc-icon{-icon-size: 1.8rem; opacity:.8; transition: transform var(--motion-duration-fast) var(--motion-ease-standard)}
+.g-acc-trigger[aria-expanded="true"] .g-acc-icon{transform: rotate(180deg)}
+
+.g-acc-panel{
+  overflow:hidden;
+  transition: height var(--motion-duration-md) var(--motion-ease-standard);
+}
+.g-acc-content{padding: 0 var(--space-4) var(--space-4); color: var(--color-muted)}
+
+.g-acc-item.is-disabled{opacity:.6}
+.g-acc-item.is-disabled .g-acc-trigger{cursor:not-allowed}
+
+@media (prefers-reduced-motion: reduce){
+  .g-acc-panel{transition:none}
+  .g-acc-icon{transition:none}
+}
+

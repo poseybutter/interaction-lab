@@ -1,0 +1,62 @@
+/* ==========================================================================
+  Icon System
+  - Remix Icon: 웹폰트 방식 (remixicon.css에서 제공, ::before + content)
+    예: <i class="ri-sun-fill"></i>
+  - KRDS Icon: mask-image 방식 (프로젝트 커스텀 아이콘)
+    예: <i class="svg-icon ico-delete-fill"></i>
+    mask-image를 사용하면 background-color로 색상 제어 가능 (테마 대응)
+========================================================================== */
+
+/* KRDS 아이콘 베이스 스타일 */
+.svg-icon {
+  display: inline-block;
+  width: var(--icon-size, 2.4rem);
+  height: var(--icon-size, 2.4rem);
+  vertical-align: middle;
+  flex-shrink: 0;
+  
+  /* mask-image 방식 */
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  background-color: currentColor; /* 상위 요소의 color 상속 (테마 자동 대응) */
+}
+
+/* === KRDS 아이콘 (mask-image) === */
+
+/* 삭제 아이콘 */
+.ico-delete-fill {
+  mask-image: url("/assets/icons/krds/resources/img/component/icon/ico_delete_fill.svg");
+}
+
+/* 각도 아이콘 (네비게이션 토글) */
+.ico-angle {
+  mask-image: url("/assets/icons/krds/resources/img/component/icon/ico_angle.svg");
+}
+
+/* Refresh 아이콘 (Remix Icon) */
+.ico-refresh {
+  mask-image: url("/assets/icons/remixicon/icons/Device/restart-line.svg");
+}
+
+/* Play 아이콘 (Remix Icon) */
+.ico-play {
+  mask-image: url("/assets/icons/remixicon/icons/Media/play-line.svg");
+}
+
+/* Stop 아이콘 (Remix Icon) */
+.ico-stop {
+  mask-image: url("/assets/icons/remixicon/icons/Media/stop-line.svg");
+}
+
+/* 예시:
+.ico-global {
+  mask-image: url("/assets/icons/krds/resources/img/component/icon/ico_global.svg");
+}
+.ico-switch-off {
+  mask-image: url("/assets/icons/krds/resources/img/component/icon/ico_switch_off.svg");
+}
+.ico-switch-on {
+  mask-image: url("/assets/icons/krds/resources/img/component/icon/ico_switch_on.svg");
+}
+*/

@@ -1,0 +1,124 @@
+/* ==========================================================================
+  @base/common.scss
+  - KRDS 마크업 “그대로”를 전제로 하는 프로젝트 공통 기반
+  - reset + a11y 유틸만 포함(토큰/컴포넌트 스타일은 여기서 금지)
+========================================================================== */
+
+/* Reset */
+*, *::before, *::after{box-sizing: inherit}
+
+html{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-size:62.5%; /* 1rem = 10px */
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+
+body{
+  margin:0;
+  padding:0;
+  /* 폰트/컬러는 variables.scss의 토큰으로 결정 */
+  font-size: var(--fs, 1.8rem);
+  color: var(--cl, var(--color-text, #0f172a));
+  line-height: var(--lh, 1.5);
+  font-family: var(--ff, var(--font-base, "Pretendard GOV"));
+  word-break: keep-all;
+  font-weight: 400;
+}
+
+header, footer, main, section, article, nav, aside{display:block}
+
+ul, ol, li, dl, dt, dd{margin:0; padding:0; list-style:none}
+h1, h2, h3, h4, h5, h6, p, form, figure, figcaption{margin:0; padding:0}
+
+fieldset, hr{display:block; margin:0; padding:0; border:0 none}
+
+input, select{max-width:100%; vertical-align:middle}
+input, select, button, textarea, optgroup{
+  margin:0;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  vertical-align: middle;
+}
+
+address, em, i{font-style:normal}
+strong{font-weight:700}
+textarea{width:100%}
+
+a{color:inherit; text-decoration:none; vertical-align:middle}
+button{padding:0; border:0 none; background:none; cursor:pointer}
+
+input[type="submit"]{appearance:none}
+
+img{max-width:100%; border:0 none; font-size:0; vertical-align:middle}
+table{width:100%; border-collapse:collapse}
+
+caption, legend, .swiper-notification{
+  overflow:hidden;
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  border:0 none;
+  clip:rect(0, 0, 0, 0);
+  white-space:nowrap;
+}
+
+input, textarea{resize:none}
+input::placeholder, textarea::placeholder{
+  font-weight: inherit;
+  color: inherit;
+  opacity: inherit;
+}
+
+select{appearance:none}
+select::-ms-expand{display:none}
+
+/* Hidden */
+[hidden]{display:none !important}
+
+/* A11y */
+.sr-only{
+  overflow:hidden;
+  position:absolute;
+  width:1px;
+  height:1px;
+  margin:-1px;
+  padding:0;
+  border:0;
+  clip:rect(0 0 0 0);
+  white-space:nowrap;
+}
+
+.skip-link,
+#krds-skip-link a,
+#skip a{
+  position:absolute;
+  left:-9999px;
+  top:auto;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+}
+
+.skip-link:focus,
+#krds-skip-link a:focus,
+#krds-skip-link a:hover,
+#krds-skip-link a:active,
+#skip a:focus,
+#skip a:hover,
+#skip a:active{
+  left:var(--space-4, 1.6rem);
+  top:var(--space-4, 1.6rem);
+  width:auto;
+  height:auto;
+  padding:var(--space-2, .8rem) var(--space-3, 1.2rem);
+  border-radius:var(--radius-sm, .6rem);
+  background:var(--color-surface, #fff);
+  outline:2px solid var(--color-primary, #2563eb);
+  z-index:9999;
+}
+

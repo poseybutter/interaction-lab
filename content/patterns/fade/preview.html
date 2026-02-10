@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fade preview</title>
+  <meta name="description" content="fade 패턴 프리뷰 (순수 HTML/CSS/JS)" />
+  <link rel="stylesheet" href="./pattern.css" />
+</head>
+<body>
+  <main class="preview-page" aria-label="fade 프리뷰">
+    <section class="preview-stage" aria-label="애니메이션 대상 영역">
+      <article class="krds-card is-fade" data-interaction-target="fade" aria-label="페이드 대상">
+        <h1 class="fade-title">Fade</h1>
+        <p class="fade-desc">
+          이 카드가 <strong>opacity</strong> 기준으로 자연스럽게 나타납니다.
+        </p>
+        <button type="button" class="krds-btn small fade-replay" aria-label="다시 재생">
+          다시 재생
+        </button>
+      </article>
+    </section>
+  </main>
+
+  <script src="./pattern.js"></script>
+</body>
+</html>
+

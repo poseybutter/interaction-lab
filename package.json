@@ -1,0 +1,23 @@
+{
+  "name": "krds-interaction-lab-platform",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/copy-content.mjs",
+    "preview": "vite preview --strictPort",
+    "css:build": "sass src/scss/common.scss css/main.css --no-source-map",
+    "css:watch": "sass --watch src/scss/common.scss:css/main.css --no-source-map"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "sass": "^1.77.8",
+    "vite": "^6.1.0"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.13.0"
+  }
+}
