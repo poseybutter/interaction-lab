@@ -22,17 +22,10 @@
 
 /* components */
 @use "./components/icon";
-@use "./components/switch";
 @use "./components/button";
-@use "./components/modal";
 @use "./components/form";
 @use "./components/krds";
-@use "./components/admin";
-@use "./components/card";
-@use "./components/table";
-@use "./components/home";
 @use "./components/code-block";
-@use "./components/accordion";
 
 /* pages/ (페이지 단위 스타일) */
 @use "./pages/demo-lab";
