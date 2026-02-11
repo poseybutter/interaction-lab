@@ -45,6 +45,28 @@
   }
 }
 
+/* Textarea (코드/멀티라인 입력용) */
+.krds-textarea{
+  @include input-base;
+  padding: 1.2rem 1.4rem;
+  min-height: 12rem;
+  resize: vertical;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+  line-height: 1.6;
+
+  // 다크 모드 기본
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e5e7eb;
+
+  // 라이트 모드
+  html[data-theme="light"] & {
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    color: #1f2937;
+  }
+}
+
 /* 삭제 버튼 */
 .btn-delete-input {
   @include flex-center;

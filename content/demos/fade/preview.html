@@ -5,16 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>fade demo preview</title>
   <meta name="description" content="Demo Fade 프리뷰 (순수 HTML/CSS/JS)" />
+  <link rel="stylesheet" href="/content/runtime/fonts.css" />
   <link rel="stylesheet" href="./preview.css" />
 </head>
 <body>
   <main class="demo-page" aria-label="Fade Demo 프리뷰">
+    <section class="demo-spacer" aria-label="스크롤 테스트 공간 (상단)">
+      <p class="demo-spacer-text">스크롤 트리거 테스트용 여백입니다. 아래로 스크롤해 카드가 화면에 들어올 때 재생됩니다.</p>
+    </section>
     <section class="demo-stage" aria-label="데모 스테이지">
       <article class="krds-card is-fade" data-lab-target="fade" aria-label="Fade 대상">
         <h1 class="demo-title">Fade Demo</h1>
         <p class="demo-desc">Controls 값을 바꾸면 즉시 반영됩니다.</p>
         <button type="button" class="krds-btn small js-replay" aria-label="다시 재생">다시 재생</button>
       </article>
+    </section>
+    <section class="demo-spacer" aria-label="스크롤 테스트 공간 (하단)">
+      <p class="demo-spacer-text">아래쪽 여백입니다. 위로 스크롤해서 다시 진입 테스트도 해보세요.</p>
     </section>
   </main>
 

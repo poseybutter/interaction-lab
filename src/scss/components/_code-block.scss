@@ -6,7 +6,8 @@
   overflow:hidden;
   
   /* 다크 모드 (기본) */
-  background: #0f172a;
+  background: linear-gradient(180deg, rgba(0,0,0,.86), rgba(0,0,0,.94));
+  background-color:#000; /* 렌더링 안정성 */
   color: #e5e7eb;
 }
 
@@ -111,6 +112,69 @@ html[data-theme="light"] .g-codeblock-copy.is-copied{
 .g-codeblock-code{
   color: inherit;
   white-space: pre;
+  /* 브라우저 기본 code 스타일(UA stylesheet)로 인해 폰트가 따로 잡히는 현상 방지 */
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* ============================================================================
+   Highlight.js (가벼운 에디터 느낌 테마)
+   - 배경은 .g-codeblock이 담당, 토큰 컬러만 정의
+============================================================================ */
+
+.g-codeblock{
+  /* 기본값은 안전하게 “상속” */
+  --hljs-comment: currentColor;
+  --hljs-keyword: currentColor;
+  --hljs-string: currentColor;
+  --hljs-number: currentColor;
+  --hljs-fn: currentColor;
+  --hljs-var: currentColor;
+
+  .hljs{background:transparent; color: inherit}
+
+  .hljs-comment,
+  .hljs-quote{color: var(--hljs-comment)}
+
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-literal,
+  .hljs-built_in{color: var(--hljs-keyword)}
+
+  .hljs-string,
+  .hljs-attr,
+  .hljs-attribute,
+  .hljs-template-tag,
+  .hljs-template-variable{color: var(--hljs-string)}
+
+  .hljs-number{color: var(--hljs-number)}
+
+  .hljs-title,
+  .hljs-title.function_,
+  .hljs-function .hljs-title{color: var(--hljs-fn)}
+
+  .hljs-variable,
+  .hljs-params{color: var(--hljs-var)}
+}
+
+/* 라이트/다크를 “확실하게” 분기 */
+html[data-theme="light"] .g-codeblock{
+  --hljs-comment: #9ca3af; /* gray-400: 주석은 더 연하게 */
+  --hljs-keyword: #7c3aed; /* violet-600 */
+  --hljs-string: #059669;  /* emerald-600 */
+  --hljs-number: #d97706;  /* amber-600 */
+  --hljs-fn: #2563eb;      /* blue-600 */
+  --hljs-var: #b45309;     /* amber-700 */
+}
+
+html[data-theme="dark"] .g-codeblock{
+  --hljs-comment: rgba(148,163,184,.65); /* slate-400 (muted) */
+  --hljs-keyword: #c084fc; /* violet-400 */
+  --hljs-string: #34d399;  /* emerald-400 */
+  --hljs-number: #fbbf24;  /* amber-400 */
+  --hljs-fn: #60a5fa;      /* blue-400 */
+  --hljs-var: #facc15;     /* yellow-400 */
 }
 
 /* ============================================================================

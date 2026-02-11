@@ -484,6 +484,28 @@ function clampNumber(n, min, max) {
   return Math.min(max, Math.max(min, v));
 }
 
+function clampNumberOrEmpty(raw, min, max) {
+  // 의도: <input type="number">에서 지우기(빈 문자열)를 허용해 “지우고 다시 쓰기” UX 개선
+  if (raw === "") return "";
+  return String(clampNumber(Number(raw), min, max));
+}
+
+function toClampedNumber(raw, fallback, min, max) {
+  // raw: string | number | null | undefined
+  // - ""(비어있음)은 사용자가 입력 중일 수 있으므로 fallback 사용
+  if (raw === "" || raw === null || raw === undefined) return fallback;
+  return clampNumber(Number(raw), min, max);
+}
+
+function normalizePlayCount(raw, fallback = 1) {
+  const s = String(raw ?? "").trim().toLowerCase();
+  if (!s) return fallback;
+  if (s === "infinite") return "infinite";
+  const n = Math.floor(Number(s));
+  if (Number.isFinite(n) && n >= 1 && n <= 99) return n;
+  return fallback;
+}
+
 function buildGeneratedJs(demoId, config) {
   const commonHowTo = `// 사용 방법
 // - 이 코드는 “대상 요소가 DOM에 존재한 뒤” 실행되어야 합니다.
@@ -784,6 +806,53 @@ function getDemoMenu() {
   return root.depth2.find((x) => x.id === "demo");
 }
 
+function buildInteractionEntryFromConfig(demoId, config) {
+  const { trigger, ...vars } = config || {};
+  const preset = demoId;
+  const target =
+    demoId === "fade" ? ".is-fade" : demoId === "scale" ? ".is-scale" : demoId === "rotate" ? ".is-rotate" : ".is-target";
+
+  return {
+    id: `lab-${demoId}`,
+    preset,
+    target,
+    trigger: trigger || { type: "immediate" },
+    vars
+  };
+}
+
+function buildInteractionJsFromInteractions(interactions) {
+  return `// assets/js/interaction.js
+// - 여기에서 인터랙션 설정을 관리합니다.
+// - 실행 엔진은 interaction-lab.runtime.js 입니다.
+
+(() => {
+  const interactions = ${JSON.stringify(interactions || [], null, 4)};
+
+  if (!window.InteractionLab || typeof window.InteractionLab.init !== "function") {
+    console.warn("[interaction.js] InteractionLab runtime을 찾지 못했습니다. interaction-lab.runtime.js 로드를 확인하세요.");
+    return;
+  }
+
+  window.InteractionLab.init(interactions);
+})();
+`;
+}
+
+function buildInteractionJsonEmbedHtml(interactions) {
+  // </script> 문자열이 들어오면 HTML 파서가 태그를 닫아버릴 수 있어 예방
+  const safeJson = JSON.stringify(interactions || [], null, 2).replace(/<\/script>/gi, "</scr" + "ipt>");
+
+  return `<!-- 1) 런타임(필수) -->
+<script src="/assets/js/interaction-lab.runtime.js" defer></script>
+
+<!-- 2) JSON 설정(필수): JSON만 넣어도 자동 실행됩니다 -->
+<script type="application/json" data-interaction-lab>
+${safeJson}
+</script>
+`;
+}
+
 export function DemoLabPage() {
   const demoMenu = getDemoMenu();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -821,38 +890,42 @@ export function DemoLabPage() {
   const [ready, setReady] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [exportTab, setExportTab] = useState("json"); // json | js
-  const [exportAcc, setExportAcc] = useState({ howto: false, legacy: false });
+  const [exportAcc, setExportAcc] = useState({ jsonEmbed: false, howto: false, legacy: false });
 
   const [triggerOptions, setTriggerOptions] = useState({
     type: "immediate", // immediate | scroll | click
     once: true,
+    scrollDirection: "both", // both | down | up
     threshold: 0.2,
     rootMargin: "0px 0px -10% 0px"
   });
 
   const [fadeOptions, setFadeOptions] = useState({
     direction: "bottom",
-    duration: 600,
-    delay: 0,
+    duration: "600",
+    delay: "0",
+    playCount: "1",
     easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
-    distance: 16,
-    opacity: 0
+    distance: "16",
+    opacity: "0"
   });
 
   const [scaleOptions, setScaleOptions] = useState({
-    duration: 600,
-    delay: 0,
+    duration: "600",
+    delay: "0",
+    playCount: "1",
     easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
-    fromScale: 0.9,
-    opacity: 0
+    fromScale: "0.9",
+    opacity: "0"
   });
 
   const [rotateOptions, setRotateOptions] = useState({
-    duration: 600,
-    delay: 0,
+    duration: "600",
+    delay: "0",
+    playCount: "1",
     easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
-    fromDeg: -24,
-    opacity: 0
+    fromDeg: "-24",
+    opacity: "0"
   });
 
   const config = useMemo(() => {
@@ -860,33 +933,36 @@ export function DemoLabPage() {
       return {
         trigger: triggerOptions,
         direction: fadeOptions.direction,
-        duration: fadeOptions.duration,
-        delay: fadeOptions.delay,
+        duration: toClampedNumber(fadeOptions.duration, 600, 0, 8000),
+        delay: toClampedNumber(fadeOptions.delay, 0, 0, 8000),
+        playCount: normalizePlayCount(fadeOptions.playCount, 1),
         easing: fadeOptions.easing,
-        distance: fadeOptions.distance,
-        opacity: fadeOptions.opacity
+        distance: toClampedNumber(fadeOptions.distance, 16, 0, 400),
+        opacity: toClampedNumber(fadeOptions.opacity, 0, 0, 1)
       };
     }
 
     if (demoId === "scale") {
       return {
         trigger: triggerOptions,
-        duration: scaleOptions.duration,
-        delay: scaleOptions.delay,
+        duration: toClampedNumber(scaleOptions.duration, 600, 0, 8000),
+        delay: toClampedNumber(scaleOptions.delay, 0, 0, 8000),
+        playCount: normalizePlayCount(scaleOptions.playCount, 1),
         easing: scaleOptions.easing,
-        fromScale: scaleOptions.fromScale,
-        opacity: scaleOptions.opacity
+        fromScale: toClampedNumber(scaleOptions.fromScale, 0.9, 0.05, 3),
+        opacity: toClampedNumber(scaleOptions.opacity, 0, 0, 1)
       };
     }
 
     if (demoId === "rotate") {
       return {
         trigger: triggerOptions,
-        duration: rotateOptions.duration,
-        delay: rotateOptions.delay,
+        duration: toClampedNumber(rotateOptions.duration, 600, 0, 8000),
+        delay: toClampedNumber(rotateOptions.delay, 0, 0, 8000),
+        playCount: normalizePlayCount(rotateOptions.playCount, 1),
         easing: rotateOptions.easing,
-        fromDeg: rotateOptions.fromDeg,
-        opacity: rotateOptions.opacity
+        fromDeg: toClampedNumber(rotateOptions.fromDeg, -24, -720, 720),
+        opacity: toClampedNumber(rotateOptions.opacity, 0, 0, 1)
       };
     }
 
@@ -910,21 +986,15 @@ export function DemoLabPage() {
   const generatedJs = useMemo(() => buildGeneratedJs(demoId, config), [demoId, config]);
 
   const interactionEntry = useMemo(() => {
-    const { trigger, ...vars } = config || {};
-    const preset = demoId;
-    const target =
-      demoId === "fade" ? ".is-fade" : demoId === "scale" ? ".is-scale" : demoId === "rotate" ? ".is-rotate" : ".is-target";
-    return {
-      id: `lab-${demoId}`,
-      preset,
-      target,
-      trigger: trigger || { type: "immediate" },
-      vars
-    };
+    return buildInteractionEntryFromConfig(demoId, config);
   }, [demoId, config]);
 
   const exportInteractionJs = useMemo(() => {
-    return `// assets/js/interaction.js\n// - 여기에서 인터랙션 설정을 관리합니다.\n// - 실행 엔진은 interaction-lab.runtime.js 입니다.\n\n(() => {\n  const interactions = [\n    ${JSON.stringify(interactionEntry, null, 4)}\n  ];\n\n  if (!window.InteractionLab || typeof window.InteractionLab.init !== \"function\") {\n    console.warn(\"[interaction.js] InteractionLab runtime을 찾지 못했습니다. interaction-lab.runtime.js 로드를 확인하세요.\");\n    return;\n  }\n\n  window.InteractionLab.init(interactions);\n})();\n`;
+    return buildInteractionJsFromInteractions([interactionEntry]);
+  }, [interactionEntry]);
+
+  const exportInteractionJsonEmbedHtml = useMemo(() => {
+    return buildInteractionJsonEmbedHtml([interactionEntry]);
   }, [interactionEntry]);
 
   const exportScriptTags = useMemo(() => {
@@ -1024,7 +1094,7 @@ export function DemoLabPage() {
                   postConfig(payload);
                   pendingConfigRef.current = null;
                 }}
-                className="lab-preview-iframe"
+                className={`lab-preview-iframe${triggerOptions.type === "scroll" ? " is-tall" : ""}`}
               />
             ) : (
               <div className="g-info-box">
@@ -1081,28 +1151,30 @@ export function DemoLabPage() {
                     onChange={(e) => setTrigger({ type: e.target.value })}
                     aria-label="애니메이션 시작 조건 선택"
                   >
-                    <option value="immediate">즉시(페이지 로드 후)</option>
-                    <option value="scroll">스크롤(뷰포트 진입 시)</option>
-                    <option value="click">클릭(대상 클릭 시)</option>
+                    <option value="immediate">페이지 로드 후</option>
+                    <option value="scroll">스크롤 진입 시</option>
+                    <option value="click">대상 클릭 시</option>
                   </select>
                 </div>
                 {triggerOptions.type === "scroll" ? (
                   <div className="lab-ease-sub lab-mt-3">
                     <div className="lab-trigger-row">
                       <div className="lab-trigger-field">
-                        <label className="sr-only" htmlFor="trigger-threshold">threshold</label>
+                        <label className="sr-only" htmlFor="trigger-threshold">진입 감도</label>
                         <select
                           id="trigger-threshold"
                           className="krds-input"
                           value={String(triggerOptions.threshold)}
                           onChange={(e) => setTrigger({ threshold: Number(e.target.value) })}
-                          aria-label="IntersectionObserver threshold 선택"
+                          aria-label="진입 감도(얼마나 보이면 시작?) 선택"
                         >
-                          {[0, 0.1, 0.2, 0.25, 0.5, 0.75, 1].map((n) => (
-                            <option key={n} value={String(n)}>
-                              threshold {n}
-                            </option>
-                          ))}
+                          <option value="0">보이기 시작하면</option>
+                          <option value="0.1">10% 보이면</option>
+                          <option value="0.2">20% 보이면</option>
+                          <option value="0.25">25% 보이면</option>
+                          <option value="0.5">절반(50%) 보이면</option>
+                          <option value="0.75">75% 보이면</option>
+                          <option value="1">전부(100%) 보이면</option>
                         </select>
                       </div>
                       <div className="lab-trigger-field is-grow">
@@ -1116,6 +1188,20 @@ export function DemoLabPage() {
                           aria-label="IntersectionObserver rootMargin 입력"
                           placeholder='예: 0px 0px -10% 0px'
                         />
+                      </div>
+                      <div className="lab-trigger-field">
+                        <label className="sr-only" htmlFor="trigger-scroll-direction">scrollDirection</label>
+                        <select
+                          id="trigger-scroll-direction"
+                          className="krds-input"
+                          value={triggerOptions.scrollDirection}
+                          onChange={(e) => setTrigger({ scrollDirection: e.target.value })}
+                          aria-label="스크롤 방향 조건 선택"
+                        >
+                          <option value="both">방향 무관</option>
+                          <option value="down">위 → 아래 스크롤</option>
+                          <option value="up">아래 → 위 스크롤</option>
+                        </select>
                       </div>
                       <div className="lab-trigger-field">
                         <label className="sr-only" htmlFor="trigger-once">once</label>
@@ -1132,7 +1218,7 @@ export function DemoLabPage() {
                       </div>
                     </div>
                     <p className="form-hint lab-mt-2">
-                      스크롤 트리거는 기본적으로 “진입 전엔 시작 상태(숨김/오프셋)”로 유지되고, 진입 순간 재생됩니다.
+                      “진입 감도”는 대상 요소가 화면에 몇 % 들어왔을 때 시작할지입니다. (예: 20% 보이면 시작)
                     </p>
                   </div>
                 ) : triggerOptions.type === "click" ? (
@@ -1146,8 +1232,7 @@ export function DemoLabPage() {
                 <>
                   <div className="form-group">
                     <div className="form-tit lab-form-tit">
-                      <label htmlFor="fade-direction">방향</label>
-                      <span className="lab-form-tit-sub">어느 쪽에서 등장?</span>
+                      <label htmlFor="fade-direction">Direction</label>
                     </div>
                     <div className="form-conts">
                       <select
@@ -1155,12 +1240,12 @@ export function DemoLabPage() {
                         className="krds-input"
                         value={fadeOptions.direction}
                         onChange={(e) => setFade({ direction: e.target.value })}
-                        aria-label="Fade 방향 선택"
+                        aria-label="Select fade direction"
                       >
-                        <option value="bottom">아래 → 위</option>
-                        <option value="top">위 → 아래</option>
-                        <option value="left">왼쪽 → 오른쪽</option>
-                        <option value="right">오른쪽 → 왼쪽</option>
+                        <option value="bottom">Bottom → Up</option>
+                        <option value="top">Top → Down</option>
+                        <option value="left">Left → Right</option>
+                        <option value="right">Right → Left</option>
                       </select>
                     </div>
                   </div>
@@ -1179,7 +1264,7 @@ export function DemoLabPage() {
                         min={0}
                         max={8000}
                         value={fadeOptions.duration}
-                        onChange={(e) => setFade({ duration: clampNumber(Number(e.target.value), 0, 8000) })}
+                        onChange={(e) => setFade({ duration: clampNumberOrEmpty(e.target.value, 0, 8000) })}
                       />
                     </div>
                   </div>
@@ -1198,8 +1283,31 @@ export function DemoLabPage() {
                         min={0}
                         max={8000}
                         value={fadeOptions.delay}
-                        onChange={(e) => setFade({ delay: clampNumber(Number(e.target.value), 0, 8000) })}
+                        onChange={(e) => setFade({ delay: clampNumberOrEmpty(e.target.value, 0, 8000) })}
                       />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <div className="form-tit lab-form-tit">
+                      <label htmlFor="fade-play-count">playCount</label>
+                      <span className="lab-form-tit-sub">재생(실행) 횟수</span>
+                    </div>
+                    <div className="form-conts">
+                      <select
+                        id="fade-play-count"
+                        className="krds-input"
+                        value={String(fadeOptions.playCount)}
+                        onChange={(e) => setFade({ playCount: e.target.value })}
+                        aria-label="재생(실행) 횟수 선택"
+                      >
+                        {[1, 2, 3, 5].map((n) => (
+                          <option key={n} value={String(n)}>
+                            {n}회
+                          </option>
+                        ))}
+                        <option value="infinite">무한</option>
+                      </select>
                     </div>
                   </div>
 
@@ -1224,7 +1332,7 @@ export function DemoLabPage() {
                         min={0}
                         max={400}
                         value={fadeOptions.distance}
-                        onChange={(e) => setFade({ distance: clampNumber(Number(e.target.value), 0, 400) })}
+                        onChange={(e) => setFade({ distance: clampNumberOrEmpty(e.target.value, 0, 400) })}
                       />
                     </div>
                   </div>
@@ -1243,7 +1351,7 @@ export function DemoLabPage() {
                         min={0}
                         max={1}
                         value={fadeOptions.opacity}
-                        onChange={(e) => setFade({ opacity: clampNumber(Number(e.target.value), 0, 1) })}
+                        onChange={(e) => setFade({ opacity: clampNumberOrEmpty(e.target.value, 0, 1) })}
                       />
                     </div>
                   </div>
@@ -1264,7 +1372,7 @@ export function DemoLabPage() {
                         min={0}
                         max={8000}
                         value={scaleOptions.duration}
-                        onChange={(e) => setScale({ duration: clampNumber(Number(e.target.value), 0, 8000) })}
+                        onChange={(e) => setScale({ duration: clampNumberOrEmpty(e.target.value, 0, 8000) })}
                       />
                     </div>
                   </div>
@@ -1283,8 +1391,31 @@ export function DemoLabPage() {
                         min={0}
                         max={8000}
                         value={scaleOptions.delay}
-                        onChange={(e) => setScale({ delay: clampNumber(Number(e.target.value), 0, 8000) })}
+                        onChange={(e) => setScale({ delay: clampNumberOrEmpty(e.target.value, 0, 8000) })}
                       />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <div className="form-tit lab-form-tit">
+                      <label htmlFor="scale-play-count">playCount</label>
+                      <span className="lab-form-tit-sub">재생(실행) 횟수</span>
+                    </div>
+                    <div className="form-conts">
+                      <select
+                        id="scale-play-count"
+                        className="krds-input"
+                        value={String(scaleOptions.playCount)}
+                        onChange={(e) => setScale({ playCount: e.target.value })}
+                        aria-label="재생(실행) 횟수 선택"
+                      >
+                        {[1, 2, 3, 5].map((n) => (
+                          <option key={n} value={String(n)}>
+                            {n}회
+                          </option>
+                        ))}
+                        <option value="infinite">무한</option>
+                      </select>
                     </div>
                   </div>
 
@@ -1309,7 +1440,7 @@ export function DemoLabPage() {
                         min={0.05}
                         max={3}
                         value={scaleOptions.fromScale}
-                        onChange={(e) => setScale({ fromScale: clampNumber(Number(e.target.value), 0.05, 3) })}
+                        onChange={(e) => setScale({ fromScale: clampNumberOrEmpty(e.target.value, 0.05, 3) })}
                       />
                     </div>
                   </div>
@@ -1328,7 +1459,7 @@ export function DemoLabPage() {
                         min={0}
                         max={1}
                         value={scaleOptions.opacity}
-                        onChange={(e) => setScale({ opacity: clampNumber(Number(e.target.value), 0, 1) })}
+                        onChange={(e) => setScale({ opacity: clampNumberOrEmpty(e.target.value, 0, 1) })}
                       />
                     </div>
                   </div>
@@ -1349,7 +1480,7 @@ export function DemoLabPage() {
                         min={0}
                         max={8000}
                         value={rotateOptions.duration}
-                        onChange={(e) => setRotate({ duration: clampNumber(Number(e.target.value), 0, 8000) })}
+                        onChange={(e) => setRotate({ duration: clampNumberOrEmpty(e.target.value, 0, 8000) })}
                       />
                     </div>
                   </div>
@@ -1368,8 +1499,31 @@ export function DemoLabPage() {
                         min={0}
                         max={8000}
                         value={rotateOptions.delay}
-                        onChange={(e) => setRotate({ delay: clampNumber(Number(e.target.value), 0, 8000) })}
+                        onChange={(e) => setRotate({ delay: clampNumberOrEmpty(e.target.value, 0, 8000) })}
                       />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <div className="form-tit lab-form-tit">
+                      <label htmlFor="rotate-play-count">playCount</label>
+                      <span className="lab-form-tit-sub">재생(실행) 횟수</span>
+                    </div>
+                    <div className="form-conts">
+                      <select
+                        id="rotate-play-count"
+                        className="krds-input"
+                        value={String(rotateOptions.playCount)}
+                        onChange={(e) => setRotate({ playCount: e.target.value })}
+                        aria-label="재생(실행) 횟수 선택"
+                      >
+                        {[1, 2, 3, 5].map((n) => (
+                          <option key={n} value={String(n)}>
+                            {n}회
+                          </option>
+                        ))}
+                        <option value="infinite">무한</option>
+                      </select>
                     </div>
                   </div>
 
@@ -1394,7 +1548,7 @@ export function DemoLabPage() {
                         min={-720}
                         max={720}
                         value={rotateOptions.fromDeg}
-                        onChange={(e) => setRotate({ fromDeg: clampNumber(Number(e.target.value), -720, 720) })}
+                        onChange={(e) => setRotate({ fromDeg: clampNumberOrEmpty(e.target.value, -720, 720) })}
                       />
                     </div>
                   </div>
@@ -1413,7 +1567,7 @@ export function DemoLabPage() {
                         min={0}
                         max={1}
                         value={rotateOptions.opacity}
-                        onChange={(e) => setRotate({ opacity: clampNumber(Number(e.target.value), 0, 1) })}
+                        onChange={(e) => setRotate({ opacity: clampNumberOrEmpty(e.target.value, 0, 1) })}
                       />
                     </div>
                   </div>
@@ -1478,6 +1632,31 @@ export function DemoLabPage() {
                 <h3 className="sr-only">Export JS</h3>
                 <CodeBlock lang="js" code={exportInteractionJs} />
                 <div className="krds-accordion lab-export-acc lab-mt-3">
+                  <div className="accordion-item">
+                    <h5 className="accordion-header">
+                      <button
+                        type="button"
+                        id="accordionHeaderExport00"
+                        className="btn-accordion"
+                        aria-controls="accordionCollapseExport00"
+                        aria-expanded={exportAcc.jsonEmbed ? "true" : "false"}
+                        onClick={() => setExportAcc((p) => ({ ...p, jsonEmbed: !p.jsonEmbed }))}
+                      >
+                        추천: JSON만 넣고 자동 실행(HTML 스니펫)
+                      </button>
+                    </h5>
+                    <div
+                      id="accordionCollapseExport00"
+                      className={`accordion-collapse collapse${exportAcc.jsonEmbed ? " show" : ""}`}
+                      aria-labelledby="accordionHeaderExport00"
+                      hidden={!exportAcc.jsonEmbed}
+                    >
+                      <div className="accordion-body">
+                        <CodeBlock lang="html" code={exportInteractionJsonEmbedHtml} />
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="accordion-item">
                     <h5 className="accordion-header">
                       <button

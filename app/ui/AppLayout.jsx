@@ -189,7 +189,6 @@ function SideNav() {
                       aria-current={isDemo ? "page" : undefined}
                     >
                       <span>{demo.title}</span>
-                      <span className="nav-link-badge">{demo.description}</span>
                     </NavLink>
                   </li>
 
@@ -231,7 +230,6 @@ function SideNav() {
                                   <li key={`patterns.${leaf.ids.join(".")}.${leaf.leafId}`}>
                                 <NavLink to={to} className={({ isActive }) => `nav-link${isActive ? " is-active" : ""}`}>
                                       <span>{leaf.title}</span>
-                                      <span className="nav-link-badge">Docs</span>
                                     </NavLink>
                                   </li>
                                 );

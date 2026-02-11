@@ -1,8 +1,42 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
+import hljs from "highlight.js";
+
+function escapeHtml(input) {
+  // 의도: highlight.js 실패/미적용 시에도 XSS 없이 안전하게 렌더링
+  return String(input ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
 
 export function CodeBlock({ lang, code }) {
   const [copied, setCopied] = useState(false);
   const btnRef = useRef(null);
+
+  const normalizedLang = (lang || "").toLowerCase();
+  const hljsLang =
+    normalizedLang === "js"
+      ? "javascript"
+      : normalizedLang === "html"
+        ? "xml"
+        : normalizedLang;
+
+  const highlightedHtml = useMemo(() => {
+    const source = code ?? "";
+    if (!source) return "";
+
+    try {
+      if (hljsLang && hljs.getLanguage(hljsLang)) {
+        return hljs.highlight(source, { language: hljsLang }).value;
+      }
+      return hljs.highlightAuto(source).value;
+    } catch {
+      // 의도: 하이라이트 실패 시에도 “텍스트 그대로” 안전하게 표시
+      return escapeHtml(source);
+    }
+  }, [code, hljsLang]);
 
   const onCopy = async () => {
     try {
@@ -43,7 +77,10 @@ export function CodeBlock({ lang, code }) {
         </button>
       </div>
       <pre className="g-codeblock-pre" tabIndex={0}>
-        <code className="g-codeblock-code">{code}</code>
+        <code
+          className={`g-codeblock-code hljs${hljsLang ? ` language-${hljsLang}` : ""}`}
+          dangerouslySetInnerHTML={{ __html: highlightedHtml || escapeHtml(code ?? "") }}
+        />
       </pre>
     </div>
   );

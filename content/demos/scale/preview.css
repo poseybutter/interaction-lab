@@ -1,12 +1,28 @@
 .demo-page{
   min-height:100svh;
   padding: 2.0rem;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  font-family: "Pretendard GOV", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background:
     radial-gradient(800px 400px at 10% 0%, rgba(37,99,235,.12), transparent 60%),
     radial-gradient(700px 360px at 90% 10%, rgba(37,99,235,.08), transparent 55%),
-    #0b1220;
+    linear-gradient(180deg, rgba(0,0,0,.86), rgba(0,0,0,.94));
+  background-color:#000;
   color:#e5e7eb;
+}
+
+.demo-spacer{
+  min-height: 120svh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding-top: 2.4rem;
+}
+.demo-spacer-text{
+  margin:0;
+  max-width: 92rem;
+  width: 100%;
+  color: rgba(229,231,235,.75);
+  font-size: 1.3rem;
 }
 
 .demo-stage{

@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+/* ==========================================================================
+  content/runtime/fonts.css
+  - iframe로 로드되는 /content/* 문서에서 Pretendard GOV 폰트를 쓰기 위한 공통 폰트 로더
+  - React Viewer(SCSS) 쪽 @font-face는 iframe 문서에는 자동으로 적용되지 않음
+========================================================================== */
+
+@font-face{
+  font-family:"Pretendard GOV";
+  src:
+    url("/assets/fonts/PretendardGov/PretendardGOV-Regular.subset.woff2") format("woff2"),
+    url("/assets/fonts/PretendardGov/PretendardGOV-Regular.subset.woff") format("woff");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+
+@font-face{
+  font-family:"Pretendard GOV";
+  src:
+    url("/assets/fonts/PretendardGov/PretendardGOV-Medium.subset.woff2") format("woff2"),
+    url("/assets/fonts/PretendardGov/PretendardGOV-Medium.subset.woff") format("woff");
+  font-weight:500;
+  font-style:normal;
+  font-display:swap;
+}
+
+@font-face{
+  font-family:"Pretendard GOV";
+  src:
+    url("/assets/fonts/PretendardGov/PretendardGOV-Bold.subset.woff2") format("woff2"),
+    url("/assets/fonts/PretendardGov/PretendardGOV-Bold.subset.woff") format("woff");
+  font-weight:700;
+  font-style:normal;
+  font-display:swap;
+}
+

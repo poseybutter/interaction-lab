@@ -17,7 +17,11 @@
     transform var(--motion-duration-md) var(--motion-ease-standard),
     width var(--motion-duration-md) var(--motion-ease-standard);
 }
-html[data-theme="dark"] .app-nav{background:linear-gradient(180deg, rgba(17,24,39,.85), rgba(15,23,42,.65))}
+html[data-theme="dark"] .app-nav{
+  /* 요청: 다크 모드 사이드바를 “검정 계열”로 */
+  background: linear-gradient(180deg, rgba(0,0,0,.86), rgba(0,0,0,.94));
+  background-color: #000; /* 렌더링 안정성 */
+}
 
 .app-nav-inner{
   height:100%;
@@ -180,8 +184,9 @@ html[data-theme="dark"] .nav-link:hover{background:rgba(255,255,255,.06); border
 }
 html[data-theme="dark"] .nav-link.is-active,
 html[data-theme="dark"] .nav-link[aria-current="page"]{
-  background: rgba(59,130,246,.14);
-  border-color: rgba(59,130,246,.28);
+  /* 검정 계열 네비 배경에 맞춘 “은은한 강조” */
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.14);
 }
 .nav-link.is-disabled{opacity:.55; cursor:not-allowed}
 .nav-link-badge{

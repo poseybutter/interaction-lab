@@ -11,7 +11,8 @@
 
 .pattern-iframe{
   width:100%;
-  height:360px;
+  /* JS에서 docs.html의 scrollHeight로 자동 조절 */
+  min-height: 240px;
   border:0;
   background:transparent;
 }

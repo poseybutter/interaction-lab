@@ -54,11 +54,15 @@
 
 .lab-preview-iframe{
   width:100%;
-  height:420px;
+  height:380px;
+  min-height:320px;
   border:0;
   background:transparent;
 }
-.lab-preview-iframe.is-tall{height:520px}
+.lab-preview-iframe.is-tall{
+  height:min(56vh, 560px);
+  min-height:420px;
+}
 
 .lab-mt-3{margin-top: var(--space-3)}
 .lab-mt-2{margin-top: var(--space-2)}
